@@ -9,6 +9,7 @@ import Projects from '../components/Projects';
 import Timeline from '../components/Timeline';
 import Testimonial from '../components/Testimonial';
 import Contact from '../components/Contact';
+import Footer from '../components/Footer';
 function Home() {
     const params = useParams();
     const navigate = useNavigate();
@@ -42,7 +43,6 @@ function Home() {
 
         fetchUserData();
     }, [params?.user, userId, navigate]);
-    console.log(user);
 
 
 // filtering all the data from the API
@@ -53,6 +53,8 @@ function Home() {
     const filteredSocialHandles = user?.social_handles?.filter((item) => item.enabled);
     const filteredEducation = user?.timeline?.filter((item) => item.forEducation && item.enabled);
     const filteredExperience = user?.timeline?.filter((item) => !item.forEducation && item.enabled);
+// console.log(user);
+
 
     if (isLoading) {
         return <div className="w-full h-screen bg-black flex items-center justify-center text-center">Loading..</div>;
@@ -60,14 +62,15 @@ function Home() {
     return (
         <>
             <Header />
-            <Hero />
-            <About />
-            <Skills />
-            <Projects />
-            <Services />
-            <Timeline />
-            <Testimonial />
-            <Contact />
+            <Hero aboutinfo={user?.about}  />
+            <About aboutinfo={user?.about} />
+            <Skills skillset={sortedFilteredSkills} />
+            <Projects sortedFilteredProject={sortedFilteredProject} />
+            <Services filteredServices={filteredServices} />
+            <Timeline filteredEducation={filteredEducation} filteredExperience={filteredExperience} />
+            <Testimonial filteredTestimonials={filteredTestimonials} />
+            <Contact social={filteredSocialHandles} aboutinfo={user?.about}  />
+            <Footer/>
         </>
     );
 }
